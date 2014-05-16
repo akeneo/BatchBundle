@@ -46,7 +46,14 @@ class BatchCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'The email to notify at the end of the job execution'
-            );
+            )
+            ->addOption(
+                'username',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The user who launched the execution of the job'
+            )
+        ;
     }
 
     /**
@@ -119,6 +126,10 @@ class BatchCommand extends ContainerAwareCommand
             $jobExecution = $job->getJobRepository()->createJobExecution($jobInstance);
         }
         $jobExecution->setJobInstance($jobInstance);
+
+        if ($username = $input->getOption('username')) {
+            $jobExecution->setUsername($username);
+        }
 
         $this
             ->getContainer()

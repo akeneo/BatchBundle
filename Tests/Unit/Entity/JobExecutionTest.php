@@ -112,6 +112,15 @@ class JobExecutionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedExecutionContext, $this->jobExecution->getExecutionContext());
     }
 
+    public function testGetSetUsername()
+    {
+        $this->assertNull($this->jobExecution->getUsername());
+
+        $expectedUsername = 'ian_murdock';
+        $this->assertEntity($this->jobExecution->setUsername($expectedUsername));
+        $this->assertEquals($expectedUsername, $this->jobExecution->getUsername());
+    }
+
     public function testStepExecutions()
     {
         $this->assertEquals(0, $this->jobExecution->getStepExecutions()->count());

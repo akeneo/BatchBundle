@@ -122,6 +122,13 @@ class JobExecution
     private $logFile;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=255, nullable=true)
+     */
+    private $username;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -523,6 +530,26 @@ class JobExecution
     public function getLogFile()
     {
         return $this->logFile;
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return JobExecution
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 
     /**
