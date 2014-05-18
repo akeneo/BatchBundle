@@ -27,6 +27,13 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->booleanNode('enable_mail_notification')->defaultFalse()->end()
                 ->scalarNode('sender_email')->defaultValue('mailer@bap.com')->end()
+                ->arrayNode('security')
+                    ->children()
+                        ->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('user_field_identifier')->defaultValue('username')->cannotBeEmpty()->end()
+                        ->scalarNode('admin_identifier')->cannotBeEmpty()->end()
+                    ->end()
+                ->end()
             ->end()
         ->end();
 

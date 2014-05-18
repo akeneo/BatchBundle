@@ -8,6 +8,7 @@ parameters:
     akeneo_batch.logger.batch_log_handler.class:              Akeneo\Bundle\BatchBundle\Monolog\Handler\BatchLogHandler
     akeneo_batch.mail_notifier.class:                         Akeneo\Bundle\BatchBundle\Notification\MailNotifier
     akeneo_batch.set_job_execution_log_file_subscriber.class: Akeneo\Bundle\BatchBundle\EventListener\SetJobExecutionLogFileSubscriber
+    akeneo_batch.token_manager.class:                         Akeneo\Bundle\BatchBundle\Security\TokenManager
     akeneo_batch.connectors_config:                           ~
     akeneo_batch.jobs_config:                                 ~
 
@@ -70,3 +71,11 @@ services:
             - @akeneo_batch.logger.batch_log_handler
         tags:
             - { name: kernel.event_subscriber }
+
+    akeneo_batch.token_manager:
+        class: %akeneo_batch.token_manager.class%
+        arguments:
+            - @doctrine
+            - %akeneo_batch.security.user_class%
+            - %akeneo_batch.security.user_field_identifier%
+            - %akeneo_batch.security.admin_identifier%

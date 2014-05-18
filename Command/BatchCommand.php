@@ -7,11 +7,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\Constraints as Assert;
 use Monolog\Handler\StreamHandler;
 use Doctrine\ORM\EntityManager;
+use Akeneo\Bundle\BatchBundle\Security\TokenManager;
 use Akeneo\Bundle\BatchBundle\Job\ExitStatus;
 
 /**
@@ -127,9 +129,16 @@ class BatchCommand extends ContainerAwareCommand
         }
         $jobExecution->setJobInstance($jobInstance);
 
-        if ($username = $input->getOption('username')) {
-            $jobExecution->setUsername($username);
+        // Username given in the option can override the one provided by the JobExecution
+        $username = $input->getOption('username');
+        if (null === $username) {
+            $username = $jobExecution->getUsername();
         }
+        $jobExecution->setUsername($username);
+
+        // Define the token in the security context
+        $token = $this->getTokenManager()->get($username);
+        $this->getSecurityContext()->setToken($token);
 
         $this
             ->getContainer()
@@ -195,6 +204,22 @@ class BatchCommand extends ContainerAwareCommand
     protected function getConnectorRegistry()
     {
         return $this->getContainer()->get('akeneo_batch.connectors');
+    }
+
+    /**
+     * @return TokenManager
+     */
+    protected function getTokenManager()
+    {
+        return $this->getContainer()->get('akeneo_batch.token_manager');
+    }
+
+    /**
+     * @return SecurityContextInterface
+     */
+    protected function getSecurityContext()
+    {
+        return $this->getContainer()->get('security.context');
     }
 
     private function getErrorMessages(ConstraintViolationList $errors)

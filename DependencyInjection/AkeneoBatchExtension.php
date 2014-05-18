@@ -33,5 +33,12 @@ class AkeneoBatchExtension extends Extension
                 ->getDefinition('akeneo_batch.mail_notifier')
                 ->addTag('akeneo_batch.notifier');
         }
+
+        $container->setParameter('akeneo_batch.security.user_class', $config['security']['user_class']);
+        $container->setParameter('akeneo_batch.security.user_field_identifier', $config['security']['user_field_identifier']);
+        $container->setParameter(
+            'akeneo_batch.security.admin_identifier',
+            isset($config['security']['admin_identifier']) ? $config['security']['admin_identifier'] : null
+        );
     }
 }
