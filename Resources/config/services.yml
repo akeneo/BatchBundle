@@ -11,6 +11,7 @@ parameters:
     akeneo_batch.connectors_config:                           ~
     akeneo_batch.jobs_config:                                 ~
     akeneo_batch.command.authenticate_user_listener.class:    Akeneo\Bundle\BatchBundle\EventListener\AuthenticateUserListener
+    akeneo_batch.command.push_stdout_logger_handler_listener.class: Akeneo\Bundle\BatchBundle\EventListener\PushStdOutLoggerHandlerListener
 
 services:
     # connectors registry
@@ -77,3 +78,10 @@ services:
         arguments:
             - '@security.context'
             - '@monolog.logger.batch'
+
+    akeneo_batch.command.push_stdout_logger_handler_listener:
+        class: %akeneo_batch.command.push_stdout_logger_handler_listener.class%
+        arguments:
+            - '@monolog.logger.batch'
+        tags:
+            - { name:kernel.event_listener, event: console.command, method: push, priority: 128 }

@@ -54,13 +54,6 @@ class BatchCommand extends ContainerAwareCommand implements UserAuthenticator
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $noDebug = $input->getOption('no-debug');
-        if (!$noDebug) {
-            $logger = $this->getContainer()->get('monolog.logger.batch');
-            // Fixme: Use ConsoleHandler available on next Symfony version (2.4 ?)
-            $logger->pushHandler(new StreamHandler('php://stdout'));
-        }
-
         $code = $input->getArgument('code');
         $jobInstance = $this->getJobManager()->getRepository('AkeneoBatchBundle:JobInstance')->findOneByCode($code);
         if (!$jobInstance) {
