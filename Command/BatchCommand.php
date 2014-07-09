@@ -21,7 +21,7 @@ use Akeneo\Bundle\BatchBundle\Job\ExitStatus;
  * @copyright 2013 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class BatchCommand extends ContainerAwareCommand
+class BatchCommand extends ContainerAwareCommand implements UserAuthenticator
 {
     /**
      * {@inheritdoc}

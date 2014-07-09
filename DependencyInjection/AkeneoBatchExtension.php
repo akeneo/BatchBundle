@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Batch bundle services configuration declaration
@@ -27,11 +28,46 @@ class AkeneoBatchExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
+        $this->configureNotifier($container, $config);
+        $this->configureAuthenticationListener($container, $config);
+
+    }
+
+    private function configureNotifier(ContainerBuilder $container, array $config)
+    {
         $container->setParameter('akeneo_batch.mail_notifier.sender_email', $config['sender_email']);
         if ($config['enable_mail_notification']) {
             $container
                 ->getDefinition('akeneo_batch.mail_notifier')
                 ->addTag('akeneo_batch.notifier');
+        }
+    }
+
+    /**
+     * Register batch command authentication listener
+     * and set its user provider
+     *
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    private function configureAuthenticationListener(ContainerBuilder $container, array $config)
+    {
+        if (isset($config['security']['user_provider'])) {
+            $definition = $container->getDefinition('akeneo_batch.command.authenticate_user_listener');
+
+            $args = $definition->getArguments();
+            $args[] = new Reference($config['security']['user_provider']);
+            $definition->setArguments($args);
+
+            $definition
+                ->addTag(
+                    'kernel.event_listener',
+                    array(
+                        'event' => 'console.command',
+                        'method' => 'authenticate',
+                        'priority' => 127,
+                    )
+                );
         }
     }
 }

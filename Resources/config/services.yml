@@ -10,6 +10,7 @@ parameters:
     akeneo_batch.set_job_execution_log_file_subscriber.class: Akeneo\Bundle\BatchBundle\EventListener\SetJobExecutionLogFileSubscriber
     akeneo_batch.connectors_config:                           ~
     akeneo_batch.jobs_config:                                 ~
+    akeneo_batch.command.authenticate_user_listener.class:    Akeneo\Bundle\BatchBundle\EventListener\AuthenticateUserListener
 
 services:
     # connectors registry
@@ -70,3 +71,9 @@ services:
             - @akeneo_batch.logger.batch_log_handler
         tags:
             - { name: kernel.event_subscriber }
+
+    akeneo_batch.command.authenticate_user_listener:
+        class: %akeneo_batch.command.authenticate_user_listener.class%
+        arguments:
+            - '@security.context'
+            - '@monolog.logger.batch'
