@@ -2,16 +2,16 @@
 
 namespace Akeneo\Bundle\BatchBundle\EventListener;
 
-use Akeneo\Bundle\BatchBundle\Command\BatchCommand;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
-use Psr\Log\LoggerInterface;
 use Monolog\Handler\StreamHandler;
-use Symfony\Component\Console\Input\InputInterface;
+use Monolog;
+use Akeneo\Bundle\BatchBundle\Command\BatchCommand;
 
 /**
  * Print batch command logger output to std out
@@ -22,11 +22,22 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class PushStdOutLoggerHandlerListener
 {
-    public function __construct(LoggerInterface $logger)
+    /** @var Monolog\Logger */
+    protected $logger;
+
+    /**
+     * @param Monolog\Logger $logger
+     */
+    public function __construct(Monolog\Logger $logger)
     {
         $this->logger = $logger;
     }
 
+    /**
+     * Push a stream handler into the batch logger
+     *
+     * @param ConsoleCommandEvent $event
+     */
     public function push(ConsoleCommandEvent $event)
     {
         if (!$event->getCommand() instanceof BatchCommand) {

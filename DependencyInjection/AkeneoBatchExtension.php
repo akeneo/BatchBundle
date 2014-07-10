@@ -30,9 +30,14 @@ class AkeneoBatchExtension extends Extension
 
         $this->configureNotifier($container, $config);
         $this->configureAuthenticationListener($container, $config);
-
     }
 
+    /**
+     * Register the mail notifier when enabled through configuration
+     *
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
     private function configureNotifier(ContainerBuilder $container, array $config)
     {
         $container->setParameter('akeneo_batch.mail_notifier.sender_email', $config['sender_email']);

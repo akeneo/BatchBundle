@@ -13,7 +13,9 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
  */
 class AuthenticateUserListenerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $securityContext;
     protected $logger;
+    protected $userProvider;
     protected $translator;
     protected $subscriber;
 

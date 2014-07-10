@@ -19,6 +19,20 @@ use Psr\Log\LoggerInterface;
  */
 class AuthenticateUserListener
 {
+    /** @var SecurityContextInterface */
+    protected $securityContext;
+
+    /** @var LoggerInterface */
+    protected $logger;
+
+    /** @var UserProviderInterface */
+    protected $userProvider;
+
+    /**
+     * @param SecurityContextInterface $securityContext
+     * @param LoggerInterface          $logger
+     * @param UserProviderInterface    $userProvider
+     */
     public function __construct(
         SecurityContextInterface $securityContext,
         LoggerInterface $logger,
@@ -29,6 +43,11 @@ class AuthenticateUserListener
         $this->userProvider = $userProvider;
     }
 
+    /**
+     * Authenticate the user passed as option of the batch command
+     *
+     * @param ConsoleCommandEvent $event
+     */
     public function authenticate(ConsoleCommandEvent $event)
     {
         if (!$event->getCommand() instanceof UserAuthenticator) {

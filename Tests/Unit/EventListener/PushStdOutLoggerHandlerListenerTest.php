@@ -13,6 +13,9 @@ use Akeneo\Bundle\BatchBundle\Command\BatchCommand;
  */
 class PushStdOutLoggerHandlerListenerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $logger;
+    protected $subscriber;
+
     public function setUp()
     {
         $this->logger = $this->getMockBuilder('Monolog\Logger')->disableOriginalConstructor()->getMock();
