@@ -27,13 +27,6 @@ class PushStdOutLoggerHandlerListener
         $this->logger = $logger;
     }
 
-    public static function getSubscribedEvents()
-    {
-        return array(
-            ConsoleEvents::COMMAND => ['push', 128],
-        );
-    }
-
     public function push(ConsoleCommandEvent $event)
     {
         if (!$event->getCommand() instanceof BatchCommand) {
