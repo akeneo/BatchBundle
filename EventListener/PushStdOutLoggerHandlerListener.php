@@ -14,11 +14,11 @@ use Monolog\Handler\StreamHandler;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * EventListener/Firewall
+ * Print batch command logger output to std out
  *
  * @author    Gildas Quemener <gildas@akeneo.com>
  * @copyright 2014 Akeneo SAS (http://www.akeneo.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 class PushStdOutLoggerHandlerListener
 {
