@@ -26,7 +26,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
 
         $config = $processor->process($configuration->getConfigTreeBuilder()->buildTree(), array());
-        $this->assertEquals('mailer@bap.com', $config['sender_email']);
+        $this->assertEquals('admin@example.com', $config['sender_email']);
     }
 
     public function testCustomConfiguration()
