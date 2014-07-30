@@ -8,6 +8,7 @@ use Akeneo\Bundle\BatchBundle\Job\ExitStatus;
 use Akeneo\Bundle\BatchBundle\Job\RuntimeErrorException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -506,6 +507,13 @@ class StepExecution
         $element = $this->stepName;
         if (strpos($element, '.')) {
             $element = substr($element, 0, strpos($element, '.'));
+        }
+        if (is_object($item)) {
+            $item = [
+                'class'  => ClassUtils::getClass($item),
+                'id'     => method_exists($item, 'getId') ? $item->getId() : '[unknown]',
+                'string' => method_exists($item, '__toString') ? (string) $item : '[unknown]',
+            ];
         }
         $this->warnings->add(
             new Warning(
