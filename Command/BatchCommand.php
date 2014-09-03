@@ -127,8 +127,9 @@ class BatchCommand extends ContainerAwareCommand implements UserAuthenticator
         if (ExitStatus::COMPLETED === $jobExecution->getExitStatus()->getExitCode()) {
             $output->writeln(
                 sprintf(
-                    '<info>%s has been successfully executed.</info>',
-                    ucfirst($jobInstance->getType())
+                    '<info>%s %s has been successfully executed.</info>',
+                    ucfirst($jobInstance->getType()),
+                    $jobInstance->getCode()
                 )
             );
         } else {
@@ -183,7 +184,7 @@ class BatchCommand extends ContainerAwareCommand implements UserAuthenticator
      */
     protected function getDefaultEntityManager()
     {
-        return $this->getContainer()->get('doctrine')->getEntityManager();
+        return $this->getContainer()->get('doctrine')->getManager();
     }
 
     /**

@@ -170,6 +170,15 @@ class StepExecutionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddWarning()
     {
+        $getWarnings = function ($warnings) {
+            return array_map(
+                function ($warning) {
+                    return $warning->toArray();
+                },
+                $warnings->toArray()
+            );
+        };
+
         $this->stepExecution->addWarning(
             'foo',
             '%something% is wrong on line 1',
@@ -181,6 +190,13 @@ class StepExecutionTest extends \PHPUnit_Framework_TestCase
             '%something% is wrong on line 2',
             array('%something%' => 'Item2'),
             array('baz' => false)
+        );
+        $item = new \stdClass();
+        $this->stepExecution->addWarning(
+            'baz',
+            '%something% is wrong with object 3',
+            array('%something%' => 'Item3'),
+            $item
         );
 
         $this->assertEquals(
@@ -196,9 +212,15 @@ class StepExecutionTest extends \PHPUnit_Framework_TestCase
                     'reason' => '%something% is wrong on line 2',
                     'reasonParameters' => array('%something%' => 'Item2'),
                     'item'   => array('baz' => false)
+                ),
+                array(
+                    'name'   => 'my_step_execution.steps.baz.title',
+                    'reason' => '%something% is wrong with object 3',
+                    'reasonParameters' => array('%something%' => 'Item3'),
+                    'item'   => array('id' => '[unknown]', 'class' => 'stdClass', 'string' => '[unknown]')
                 )
             ),
-            $this->stepExecution->getWarnings()
+            $getWarnings($this->stepExecution->getWarnings())
         );
 
         $stepExecution = new StepExecution('my_step_execution.foobarbaz', $this->jobExecution);
@@ -231,7 +253,7 @@ class StepExecutionTest extends \PHPUnit_Framework_TestCase
                     'item'   => array('baz' => false)
                 )
             ),
-            $stepExecution->getWarnings()
+            $getWarnings($stepExecution->getWarnings())
         );
     }
 

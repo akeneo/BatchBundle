@@ -8,6 +8,7 @@ parameters:
     akeneo_batch.logger.batch_log_handler.class:              Akeneo\Bundle\BatchBundle\Monolog\Handler\BatchLogHandler
     akeneo_batch.mail_notifier.class:                         Akeneo\Bundle\BatchBundle\Notification\MailNotifier
     akeneo_batch.set_job_execution_log_file_subscriber.class: Akeneo\Bundle\BatchBundle\EventListener\SetJobExecutionLogFileSubscriber
+    akeneo_batch.manager.job_execution.class:                 Akeneo\Bundle\BatchBundle\Manager\JobExecutionManager
     akeneo_batch.connectors_config:                           ~
     akeneo_batch.jobs_config:                                 ~
     akeneo_batch.command.authenticate_user_listener.class:    Akeneo\Bundle\BatchBundle\EventListener\AuthenticateUserListener
@@ -85,3 +86,8 @@ services:
             - '@monolog.logger.batch'
         tags:
             - { name:kernel.event_listener, event: console.command, method: push, priority: 128 }
+
+    akeneo_batch.manager.job_execution:
+        class: %akeneo_batch.manager.job_execution.class%
+        arguments:
+            - @doctrine.orm.entity_manager

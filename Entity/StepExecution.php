@@ -2,12 +2,14 @@
 
 namespace Akeneo\Bundle\BatchBundle\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
 use Akeneo\Bundle\BatchBundle\Job\ExitStatus;
 use Akeneo\Bundle\BatchBundle\Job\RuntimeErrorException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Util\ClassUtils;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Batch domain object representation the execution of a step. Unlike
@@ -86,7 +88,7 @@ class StepExecution
     private $startTime;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
@@ -133,12 +135,18 @@ class StepExecution
      */
     private $errors = array();
 
+
     /**
-     * @var array
+     * @var ArrayCollection
      *
-     * @ORM\Column(name="warnings", type="array")
+     * @ORM\OneToMany(
+     *      targetEntity="Warning",
+     *      mappedBy="stepExecution",
+     *      cascade={"persist", "remove"},
+     *      orphanRemoval=true
+     * )
      */
-    private $warnings = array();
+    private $warnings;
 
     /**
      * @var array
@@ -158,6 +166,7 @@ class StepExecution
         $this->stepName = $stepName;
         $this->jobExecution = $jobExecution;
         $jobExecution->addStepExecution($this);
+        $this->warnings = new ArrayCollection();
         $this->executionContext = new ExecutionContext();
         $this->setStatus(new BatchStatus(BatchStatus::STARTING));
         $this->setExitStatus(new ExitStatus(ExitStatus::EXECUTING));
@@ -499,18 +508,28 @@ class StepExecution
         if (strpos($element, '.')) {
             $element = substr($element, 0, strpos($element, '.'));
         }
-        $this->warnings[] = array(
-            'name'             => sprintf('%s.steps.%s.title', $element, $name),
-            'reason'           => $reason,
-            'reasonParameters' => $reasonParameters,
-            'item'             => $item,
+        if (is_object($item)) {
+            $item = [
+                'class'  => ClassUtils::getClass($item),
+                'id'     => method_exists($item, 'getId') ? $item->getId() : '[unknown]',
+                'string' => method_exists($item, '__toString') ? (string) $item : '[unknown]',
+            ];
+        }
+        $this->warnings->add(
+            new Warning(
+                $this,
+                sprintf('%s.steps.%s.title', $element, $name),
+                $reason,
+                $reasonParameters,
+                $item
+            )
         );
     }
 
     /**
      * Get the warnings
      *
-     * @return array[]
+     * @return ArrayCollection
      */
     public function getWarnings()
     {
