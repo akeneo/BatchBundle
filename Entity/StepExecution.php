@@ -81,7 +81,7 @@ class StepExecution
     private $filterCount = 0;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
@@ -135,7 +135,6 @@ class StepExecution
      */
     private $errors = array();
 
-
     /**
      * @var ArrayCollection
      *
@@ -177,6 +176,9 @@ class StepExecution
         $this->startTime = new \DateTime();
     }
 
+    /**
+     * Reset id on clone
+     */
     public function __clone()
     {
         $this->id = null;
@@ -218,7 +220,7 @@ class StepExecution
     /**
      * Returns the time that this execution ended
      *
-     * @return the time that this execution ended
+     * @return \DateTime time that this execution ended
      */
     public function getEndTime()
     {
@@ -228,7 +230,7 @@ class StepExecution
     /**
      * Sets the time that this execution ended
      *
-     * @param mixed $endTime the time that this execution ended
+     * @param \DateTime $endTime the time that this execution ended
      *
      * @return $this
      */
@@ -242,7 +244,7 @@ class StepExecution
     /**
      * Returns the current number of items read for this execution
      *
-     * @return the current number of items read for this execution
+     * @return integer the current number of items read for this execution
      */
     public function getReadCount()
     {
@@ -274,7 +276,7 @@ class StepExecution
     /**
      * Returns the current number of items written for this execution
      *
-     * @return the current number of items written for this execution
+     * @return integer the current number of items written for this execution
      */
     public function getWriteCount()
     {
@@ -306,7 +308,7 @@ class StepExecution
     /**
      * Returns the current number of items filtered out of this execution
      *
-     * @return the current number of items filtered out of this execution
+     * @return integer the current number of items filtered out of this execution
      */
     public function getFilterCount()
     {
@@ -314,7 +316,7 @@ class StepExecution
     }
 
     /**
-     * @return flag to indicate that an execution should halt
+     * @return boolean flag to indicate that an execution should halt
      */
     public function isTerminateOnly()
     {
@@ -347,7 +349,7 @@ class StepExecution
     /**
      * Sets the time this execution started
      *
-     * @param mixed $startTime the time this execution started
+     * @param \DateTime $startTime the time this execution started
      *
      * @return $this
      */
@@ -401,7 +403,7 @@ class StepExecution
     }
 
     /**
-     * @return the name of the step
+     * @return string the name of the step
      */
     public function getStepName()
     {
@@ -423,7 +425,7 @@ class StepExecution
     }
 
     /**
-     * @return the exitCode
+     * @return ExitStatus the exit status
      */
     public function getExitStatus()
     {
@@ -433,7 +435,7 @@ class StepExecution
     /**
      * Accessor for the execution context information of the enclosing job.
      *
-     * @return the that was used to start this step execution.
+     * @return JobExecution the job execution that was used to start this step execution.
      *
      */
     public function getJobExecution()
@@ -452,7 +454,7 @@ class StepExecution
 
     /**
      * Add a failure exception
-     * @param Exception $e
+     * @param \Exception $e
      *
      * @return $this
      */
@@ -469,6 +471,9 @@ class StepExecution
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getFailureExceptionMessages()
     {
         return implode(
@@ -482,6 +487,11 @@ class StepExecution
         );
     }
 
+    /**
+     * @param string $message
+     *
+     * @return StepExecution
+     */
     public function addError($message)
     {
         $this->errors[] = $message;
@@ -489,6 +499,9 @@ class StepExecution
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getErrors()
     {
         return $this->errors;
@@ -497,7 +510,7 @@ class StepExecution
     /**
      * Add a warning
      *
-     * @param string $class
+     * @param string $name
      * @param string $reason
      * @param array  $reasonParameters
      * @param mixed  $item

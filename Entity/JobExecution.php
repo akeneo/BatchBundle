@@ -60,7 +60,7 @@ class JobExecution
     private $pid;
 
     /**
-     * @var string The user who launched the job
+     * @var string|null The user who launched the job
      *
      * @ORM\Column(name="user", type="string", nullable=true)
      */
@@ -148,6 +148,9 @@ class JobExecution
         $this->failureExceptions = array();
     }
 
+    /**
+     * Clones the step executions and execution context along with the JobExecution
+     */
     public function __clone()
     {
         $this->id = null;
@@ -207,7 +210,7 @@ class JobExecution
     /**
      * Sets the time that this execution ended
      *
-     * @param mixed $endTime the time that this execution ended
+     * @param \DateTime $endTime the time that this execution ended
      *
      * @return JobExecution
      */
@@ -231,7 +234,7 @@ class JobExecution
     /**
      * Sets the time this execution started
      *
-     * @param mixed $startTime the time this execution started
+     * @param \DateTime $startTime the time this execution started
      *
      * @return JobExecution
      */
@@ -254,7 +257,7 @@ class JobExecution
     /**
      * Sets the time this execution has been created
      *
-     * @param mixed $createTime the time this execution has been created
+     * @param \DateTime $createTime the time this execution has been created
      *
      * @return JobExecution
      */
@@ -278,7 +281,7 @@ class JobExecution
     /**
      * Sets the time this execution has been updated
      *
-     * @param mixed $updatedTime the time this execution has been updated
+     * @param \DateTime $updatedTime the time this execution has been updated
      *
      * @return JobExecution
      */
@@ -469,6 +472,7 @@ class JobExecution
      * Signal the JobExecution to stop. Iterates through the associated
      * StepExecution, calling StepExecution::setTerminateOnly().
      *
+     * @return JobExecution
      */
     public function stop()
     {
@@ -513,8 +517,7 @@ class JobExecution
      * Return all failure causing exceptions for this JobExecution, including
      * step executions.
      *
-     * @return array containing all exceptions causing failure for
-     * this JobExecution.
+     * @return array containing all exceptions causing failure for this JobExecution.
      */
     public function getAllFailureExceptions()
     {
@@ -593,8 +596,8 @@ class JobExecution
      */
     public function __toString()
     {
-        $startTime       = self::formatDate($this ->startTime);
-        $endTime         = self::formatDate($this ->endTime);
+        $startTime       = self::formatDate($this->startTime);
+        $endTime         = self::formatDate($this->endTime);
         $updatedTime     = self::formatDate($this->updatedTime);
         $jobInstanceCode = $this->jobInstance != null ? $this->jobInstance->getCode() : '';
 
@@ -615,8 +618,8 @@ class JobExecution
     /**
      * Format a date or return empty string if null
      *
-     * @param \DateTime date
-     * @param string $format date format
+     * @param \DateTime $date
+     * @param string    $format
      *
      * @return string Date formatted
      */
