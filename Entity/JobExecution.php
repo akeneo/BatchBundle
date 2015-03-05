@@ -8,6 +8,7 @@ use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
 use Akeneo\Bundle\BatchBundle\Job\ExitStatus;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Job\RuntimeErrorException;
+use Akeneo\Bundle\BatchBundle\Job\JobParameters;
 
 /**
  * Batch domain object representing the execution of a job
@@ -135,6 +136,14 @@ class JobExecution
      */
     private $logFile;
 
+
+    /**
+     * @var JobParameters
+     *
+     * @ORM\Embedded(class = "JobParameters")
+     */
+    private $jobParameters;
+
     /**
      * Constructor
      */
@@ -162,6 +171,22 @@ class JobExecution
         if ($this->executionContext) {
             $this->executionContext = clone $this->executionContext;
         }
+    }
+
+    /**
+     * @return JobParameters
+     */
+    public function getJobParameters()
+    {
+        return $this->jobParameters;
+    }
+
+    /**
+     * @param JobParameters $jobParameters
+     */
+    public function setJobParameters($jobParameters)
+    {
+        $this->jobParameters = $jobParameters;
     }
 
     /**

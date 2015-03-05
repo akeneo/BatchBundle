@@ -51,6 +51,9 @@ class BatchCommand extends ContainerAwareCommand
 
     /**
      * {@inheritdoc}
+     *
+     * //TODO : put logic outside of the command
+     *
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
