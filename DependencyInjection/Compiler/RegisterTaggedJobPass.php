@@ -26,13 +26,13 @@ class RegisterTaggedJobPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->registerConverters($container);
+        $this->registerJobs($container);
     }
 
     /**
      * @param ContainerBuilder $container
      */
-    protected function registerConverters(ContainerBuilder $container)
+    protected function registerJobs(ContainerBuilder $container)
     {
         $registry = $container->getDefinition(self::JOB_REGISTRY);
         $jobs = $container->findTaggedServiceIds(self::JOB_TAG);

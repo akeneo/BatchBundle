@@ -25,27 +25,28 @@ use Akeneo\Bundle\BatchBundle\Event\EventInterface;
  */
 abstract class AbstractStep implements StepInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 
-    /**
-     * @var JobRepositoryInterface
-     */
+    /** @var JobRepositoryInterface */
     protected $jobRepository;
 
     /**
-     * @param string $name
+     * @param string                   $name
+     * @param JobRepositoryInterface   $jobRepository
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct($name)
-    {
+    public function __construct(
+        $name,
+        JobRepositoryInterface $jobRepository = null,
+        EventDispatcherInterface $eventDispatcher = null
+    ) {
         $this->name = $name;
+        $this->jobRepository = $jobRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**

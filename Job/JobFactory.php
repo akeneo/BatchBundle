@@ -4,7 +4,7 @@ namespace Akeneo\Bundle\BatchBundle\Job;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * A job instance factory
+ * A job factory
  *
  * @author    Gildas Quemener <gildas.quemener@gmail.com>
  * @copyright 2013 Akeneo SAS (http://www.akeneo.com)
@@ -29,15 +29,13 @@ class JobFactory
     /**
      * Create a job object
      *
-     * @param string $title Title of the Job Object
+     * @param string $name name of the Job Object
      *
      * @return Job $job The created job
      */
-    public function createJob($title)
+    public function createJob($name)
     {
-        $job = new Job($title);
-        $job->setJobRepository($this->jobRepository);
-        $job->setEventDispatcher($this->eventDispatcher);
+        $job = new Job($this->jobRepository, $this->eventDispatcher, [], $name);
 
         return $job;
     }

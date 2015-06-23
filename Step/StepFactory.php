@@ -15,14 +15,10 @@ use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository;
  */
 class StepFactory
 {
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 
-    /**
-     * @®ar DoctrineJobRepository
-     */
+    /** @var DoctrineJobRepository */
     protected $jobRepository;
 
     /**
@@ -36,22 +32,36 @@ class StepFactory
     }
 
     /**
-     * @param string $title
+     * @param string $name
      * @param string $class
      * @param array  $services
      * @param array  $parameters
      *
-     * @return ItemStep
+     * @return StepInterface
      */
-    public function createStep($title, $class, array $services, array $parameters)
+    public function createStep($name, $class, array $services, array $parameters)
     {
-        $step = new $class($title);
-        $step->setEventDispatcher($this->eventDispatcher);
-        $step->setJobRepository($this->jobRepository);
+        if ('Akeneo\Bundle\BatchBundle\Step\ItemStep' === $class) {
+            $reader = $services['reader'];
+            $processor = $services['processor'];
+            $writer = $services['writer'];
+            $step = new ItemStep(
+                $this->jobRepository,
+                $this->eventDispatcher,
+                $reader,
+                $processor,
+                $writer,
+                $name
+            );
+        } else {
+            $step = new $class($name);
+            $step->setEventDispatcher($this->eventDispatcher);
+            $step->setJobRepository($this->jobRepository);
 
-        foreach ($services as $setter => $service) {
-            $method = 'set'.Inflector::camelize($setter);
-            $step->$method($service);
+            foreach ($services as $setter => $service) {
+                $method = 'set'.Inflector::camelize($setter);
+                $step->$method($service);
+            }
         }
 
         foreach ($parameters as $setter => $param) {

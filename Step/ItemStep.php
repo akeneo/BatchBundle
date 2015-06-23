@@ -2,6 +2,8 @@
 
 namespace Akeneo\Bundle\BatchBundle\Step;
 
+use Akeneo\Bundle\BatchBundle\Job\JobRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\AbstractConfigurableStepElement;
@@ -19,9 +21,7 @@ use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
  */
 class ItemStep extends AbstractStep
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $batchSize = 100;
 
     /**
@@ -42,10 +42,34 @@ class ItemStep extends AbstractStep
      */
     protected $processor = null;
 
-    /**
-     * @var StepExecution
-     */
+    /** @var StepExecution */
     protected $stepExecution = null;
+
+    /**
+     * Constructor
+     *
+     * @param JobRepositoryInterface   $jobRepository
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param ItemReaderInterface      $reader
+     * @param ItemProcessorInterface   $processor
+     * @param ItemWriterInterface      $writer
+     * @param string                   $name
+     */
+    public function __construct(
+        JobRepositoryInterface $jobRepository,
+        EventDispatcherInterface $eventDispatcher,
+        ItemReaderInterface $reader,
+        ItemProcessorInterface $processor,
+        ItemWriterInterface $writer,
+        $name
+    ) {
+        parent::__construct($name);
+        $this->jobRepository = $jobRepository;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->reader = $reader;
+        $this->processor = $processor;
+        $this->writer = $writer;
+    }
 
     /**
      * Set the batch size

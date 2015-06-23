@@ -44,14 +44,23 @@ class Job implements JobInterface
     protected $editTemplate;
 
     /**
-     * Convenience constructor to immediately add name (which is mandatory)
+     * Constructor
      *
-     * @param string $name
+     * @param JobRepositoryInterface   $jobRepository
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param StepInterface[]          $steps
+     * @param string                   $name
      */
-    public function __construct($name = null)
-    {
-        $this->name   = $name;
-        $this->steps  = array();
+    public function __construct(
+        JobRepositoryInterface $jobRepository,
+        EventDispatcherInterface $eventDispatcher,
+        array $steps = [],
+        $name
+    ) {
+        $this->jobRepository = $jobRepository;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->name  = $name;
+        $this->steps = $steps;
     }
 
     /**
