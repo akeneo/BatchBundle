@@ -48,7 +48,7 @@ class Job implements JobInterface
      *
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct($name = null)
     {
         $this->name   = $name;
         $this->steps  = array();

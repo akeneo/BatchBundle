@@ -18,6 +18,8 @@ use Symfony\Component\Config\Resource\FileResource;
  * @author    Gildas Quemener <gildas.quemener@gmail.com>
  * @copyright 2013 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
+ *
+ * @deprecated replaced by RegisterTaggedJobsPass, will be removed in a future version
  */
 class RegisterJobsPass implements CompilerPassInterface
 {

@@ -17,8 +17,13 @@ use Akeneo\Bundle\BatchBundle\Job\Job;
  */
 class ConnectorRegistry
 {
+    /** @var array */
     protected $jobs = array();
+
+    /** @var JobFactory */
     protected $jobFactory;
+
+    /** @var StepFactory */
     protected $stepFactory;
 
     /**
@@ -52,6 +57,19 @@ class ConnectorRegistry
         }
 
         return null;
+    }
+
+    /**
+     * @param Job    $job
+     * @param string $jobAlias
+     * @param string $jobType
+     * @param string $jobConnector
+     */
+    public function register(Job $job, $jobAlias, $jobType, $jobConnector)
+    {
+        if (!isset($this->jobs[$jobType][$jobConnector][$jobAlias])) {
+            $this->jobs[$jobType][$jobConnector][$jobAlias] = $job;
+        }
     }
 
     /**

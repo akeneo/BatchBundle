@@ -23,6 +23,7 @@ class AkeneoBatchBundle extends Bundle
         $container
             ->addCompilerPass(new Compiler\RegisterNotifiersPass())
             ->addCompilerPass(new Compiler\PushBatchLogHandlerPass())
-            ->addCompilerPass(new Compiler\RegisterJobsPass());
+            ->addCompilerPass(new Compiler\RegisterJobsPass())
+            ->addCompilerPass(new Compiler\RegisterTaggedJobPass());
     }
 }

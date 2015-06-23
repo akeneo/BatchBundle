@@ -13,6 +13,8 @@ parameters:
     akeneo_batch.connectors_config:                           ~
     akeneo_batch.jobs_config:                                 ~
     akeneo_batch.entity.job_execution.class:                  Akeneo\Bundle\BatchBundle\Entity\JobExecution
+    akeneo_batch.job.class:                                   Akeneo\Bundle\BatchBundle\Job\Job
+    akeneo_batch.step.item_step.class:                        Akeneo\Bundle\BatchBundle\Step\ItemStep
 
 services:
     # connectors registry
