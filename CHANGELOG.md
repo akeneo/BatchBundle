@@ -1,6 +1,13 @@
 CHANGELOG 
 =========
 
+0.2.9 (2015-09-03)
+------------------
+
+### Bug fixes
+
+Fix composer requirements to minor versions
+
 0.2.8 (2015-08-03)
 ------------------
 
