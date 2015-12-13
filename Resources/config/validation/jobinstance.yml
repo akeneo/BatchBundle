@@ -1,0 +1,4 @@
+Akeneo\Component\Batch\Model\JobInstance:
+    constraints:
+        - Pim\Bundle\ImportExportBundle\Validator\Constraints\JobInstance:
+            property: alias
