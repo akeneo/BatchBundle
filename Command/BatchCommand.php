@@ -250,7 +250,7 @@ class BatchCommand extends ContainerAwareCommand
      */
     private function decodeConfiguration($data)
     {
-        $config = json_decode($data, true);
+        $config = json_decode(stripcslashes($data), true);
 
         switch (json_last_error()) {
             case JSON_ERROR_DEPTH:

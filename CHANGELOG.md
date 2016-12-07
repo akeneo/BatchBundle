@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+0.4.6 (2016-12-08)
+------------------
+
+### Bug fixes
+
+- PIM-6022: Fix shell injection in batch job launcher
+
 0.4.5 (2015-11-04)
 ------------------
 
